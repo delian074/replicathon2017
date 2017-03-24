@@ -45,6 +45,10 @@ distributed, can also make evident potential
 problems with the data. Plot a histogram
 of drug viabilities. Does it look as one would
 expect from the description of the data?
+```{r quest6, warning=FALSE}
+ggplot(pharmacoData, aes( viability ) ) +
+    geom_histogram(fill = "green", colour="red") + labs(title="Histogram for Drug Viabilities")
+```
 
 4. How many viability data points are within the
 expected range according to the definition of viability (e.g. above 0 
