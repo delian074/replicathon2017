@@ -32,6 +32,7 @@ You may find it helpful to use the version control and code sharing system calle
 ```{r question1}
 length( levels( pharmacoData$cellLine ) )
 ```
+### There are 288 cell lines contained in this data.
 
 2. What drug concentrations were used in each study?
 ```{r question2}
@@ -45,9 +46,20 @@ distributed, can also make evident potential
 problems with the data. Plot a histogram
 of drug viabilities. Does it look as one would
 expect from the description of the data?
-```{r quest6, warning=FALSE}
+
+```{r}
 ggplot(pharmacoData, aes( viability ) ) +
     geom_histogram(fill = "green", colour="red") + labs(title="Histogram for Drug Viabilities")
+```
+```{r}
+ggplot(data=pharmacoData) +
+  geom_histogram(mapping = aes(x=viability)) +
+  facet_wrap (~pharmacoData$drug, nrow = 3)
+```
+```{r}
+ggplot(data=pharmacoData) +
+  geom_histogram(mapping = aes(x=viability)) +
+  facet_wrap (~pharmacoData$study, nrow = 3)
 ```
 
 4. How many viability data points are within the
@@ -55,9 +67,224 @@ expected range according to the definition of viability (e.g. above 0
 and below 100)? Try to come up with explanations about
 the values that are out of range. Are these due to technical
 issues? Biology?
+```{r}
+sum(pharmacoData$viability >= 0) + sum(pharmacoData$viability <=100)
+sum(pharmacoData$viability < 0) + sum(pharmacoData$viability > 100)
+```
+### There are about 71,053 viability data points contained between 0 and a 100 percent. While about 15,801 viability data points are above 100 or below 0, which could suggests that the drug did not have any effect on the replication of cancer cells for those with viability above a 100, thus there are more cancer cells than at the beggining. For those with viability below 0, one might expect that the drug was able to the initial amount of cancer cells plus any that  might have grown afterwards. 
 
 5. Read the csv file containing the summarized data files. What kind
 of variables are in the data? What does each column represents?
+```{r}
+head(summarizedPharmacoData)
+str(summarizedPharmacoData)
+```
+###The variables drug and cell line are classified as characters in R. Therefore, they are categoric variables. While ic50 and acu are classified as numeric, in both CCLE and GDSC.
+
+6. Plot a histogram of the viability scores as a function of the drug
+doses. Are stronger drug concentrations consistent with lower viability scores?
+
+
+### Using Correlation Measures to Assess Replicability of Drug Response Studies
+
+1. Create a scatterplot for each drug comparing the AUC in GDSC and CCLE for all cell lines (hint: code from Tutorial 2 may help).
+```{r}
+list(levels(pharmacoData$drug))
+
+```
+
+```{r AUC 1 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="AZD0530")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 2 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="17-AAG")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 3 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="AZD6244")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 4 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="Crizotinib")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 5 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="Erlotinib")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 6 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="lapatinib")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 7 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="Nilotinib")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 8 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="Nutlin-3")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 9 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="paclitaxel")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 10 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="PD-0325901")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 11 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="PD-0332991")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 12 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="PHA-665752")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 13 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="PLX4720")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 14 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="Sorafenib")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 15 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="TAE684")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+2. Calculate correlation coefficients of the AUC in GDSC and CCLE for each drug (hint: code from Tutorial 2 may help). 
+
+3. Based on the scatterplot and correlation values, would you say that they tend to agree? Why or why not?
+
+4. Does the AUC or IC50 suggest more agreement between the studies? 
+
+5. Which drug do you think shows the most consistency between the studies? How about the least? 
+
+6. If you calculated more than one type of correlation coefficient (for example Pearson and Spearman), how do they differ? Which do you think is a better summary of the consistency between the two studies? 
+
+7. We have explored Pearson and Spearman correlation, but what about other correlation measures? For example, you could try out distance correlation, which is sensitive to nonlinear relationships. You can find this measure in the `energy` R package, which you'll need to install and load with the following commands:
+
+    ```{r, eval=FALSE}
+    install.packages("energy")
+    load(energy)
+    ```
+
+    Then, you can compute distance correlation with the `dcor()` function. How does this correlation measure compare to Pearson and Spearman? Do your conclusions about the agreement between the two studies change at all using this measure?
+
+### Identifying biological factors that influence replicability of pharmacogenomic studies
+
+1. Are there any cell lines that seem to be consistently sensitive? (Hint: look for the 5 cell lines which seem the most resistant in both studies according to the average drug response by AUC; code from Tutorial 3 may help) What effect might this have on your conclusions and interpretations of the agreement between the studies? For example, do you observe any increase in replicability (as measured by correlation of drug response) if you exclude the most resistant cell lines?
+
+2. Classify each cell line as resistant or sensitive to a drug based on its AUC value (Hint: choose a cutoff for which cell lines with AUC below the cutoff are considered sensitive and explain your choice of cutoff(s); code from Tutorial 3 may help). Compare the resistance status of cell lines in GDSC and CCLE for each drug using either a scatterplot of AUC values colored by resistance/sensitivity in each study or a table.
+
+3. Compute the Matthews correlation coefficient for sensitivity status (from #2) of cell lines in GDSC and CCLE for each drug (Hint: code from Tutorial 3 may help). 
+
+4. Are there any drugs for which most or all cell lines seem to be resistant in both studies (Hint: for each cell line, look at its average response across all drugs; code from Tutorial 3 may help)? If so, what are the correlation values for these drugs? What do these results imply about the replicability of these studies?
+
+5. Compare the Matthews correlation coefficient values by drug classes defined in Tutorial 3 (No effect, Narrow effect, Broad effect). Which drug class shows the most agreement between the studies? 
+
+6. Would you say that the sensitivity results for the two studies tend to agree?
+
+7. For one of the targeted drugs, examine the cell lines that were sensitive ih the CCLE and/or GDSC. See if you can find out what types of cells these are by searching the online Cancer Cell Line Encyclopedia http://www.broadinstitute.org/ccle (this will prompt you to register with a username, password, and email address. If you prefer, you can also search the cell line on other websites). See if you can find out what types of cancers this drug is targeted for using the NCI cancer drug database at https://www.cancer.gov/about-cancer/treatment/drugs. Does the list of cell lines found to be sensitive in the two studies agree with this?
+
+### Modeling the relation between two variables (drug concentration vs viability)
+
+1. Explore the response curves for several drug-cell line combinations. How many drugs-cell line combinations contain viability response values that would potentially enable them to be summarized into an IC50 value? You can answer this, for example, by checking whether there are viability values below 50%.
+
+2. Analyze the re-calculations of IC50 and AUCs from the drug 17-AAG in the H4 cell-line and the drug Nilotinib cell-line in the 22RV1 cell-line. See the figure below and asnwer: which statistic is more roboust, IC50 or AUC? Which statistic is more generalizable, IC50 or AUC? Justify your answer with examples and/or using the whole data recalculations from the *mySummarizedData* variable.
+
+<img src="Figures/reproducible.png" width="400px" height="200px" />
+Modified from [Kirstie Whitaker](https://github.com/KirstieJane/).
+
+3. Are the results more replicable if one uses the same code to calculate IC50 or AUC on the different datasets? Hint: you can use code from tutorial #3 to evaluate this.
+
+4. Summarize the viability curves of all the drugs in each cell-line using the slope of linear model. Is the slope of the linear regression informative of the drug response? Can we improve the replicability of the studies by using the value of the slope instead of IC50s or AUCs? 
+
+## Discussion:
+
+Summarize the main findings of your analyses in the previous four sections here. 
+
+
+
+4. How many viability data points are within the
+expected range according to the definition of viability (e.g. above 0 
+and below 100)? Try to come up with explanations about
+the values that are out of range. Are these due to technical
+issues? Biology?
+```{r}
+sum(pharmacoData$viability >= 0) + sum(pharmacoData$viability <=100)
+sum(pharmacoData$viability < 0) + sum(pharmacoData$viability > 100)
+```
+### There are about 71,053 viability data points contained between 0 and a 100 percent. While about 15,801 viability data points are above 100 or below 0, which could suggests that the drug did not have any effect on the replication of cancer cells for those with viability above a 100, thus there are more cancer cells than at the beggining. For those with viability below 0, one might expect that the drug was able to the initial amount of cancer cells plus any that  might have grown afterwards. 
+
+5. Read the csv file containing the summarized data files. What kind
+of variables are in the data? What does each column represents?
+```{r}
+head(summarizedPharmacoData)
+str(summarizedPharmacoData)
+```
+###The variables drug and cell line are classified as characters in R. Therefore, they are categoric variables. While ic50 and acu are classified as numeric, in both CCLE and GDSC.
+
 
 6. Plot a histogram of the viability scores as a function of the drug
 doses. Are stronger drug concentrations consistent with lower viability scores?
@@ -65,7 +292,130 @@ doses. Are stronger drug concentrations consistent with lower viability scores?
 ### Using Correlation Measures to Assess Replicability of Drug Response Studies
 
 1. Create a scatterplot for each drug comparing the AUC in GDSC and CCLE for all cell lines (hint: code from Tutorial 2 may help).
+```{r}
+list(levels(pharmacoData$drug))
 
+```
+
+```{r AUC 1 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="AZD0530")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 2 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="17-AAG")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 3 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="AZD6244")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 4 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="Crizotinib")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 5 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="Erlotinib")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 6 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="lapatinib")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 7 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="Nilotinib")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 8 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="Nutlin-3")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 9 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="paclitaxel")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 10 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="PD-0325901")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 11 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="PD-0332991")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 12 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="PHA-665752")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 13 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="PLX4720")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 14 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="Sorafenib")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
+
+```{r AUC 15 drug}
+library(ggplot2)
+ggplot(aes(x=auc_GDSC, y=auc_CCLE), data=subset(cellLinesSummary, drug=="TAE684")) +
+    geom_point() +
+    xlab("GDSC AUC") +
+    ylab("CCLE AUC") 
+```
 2. Calculate correlation coefficients of the AUC in GDSC and CCLE for each drug (hint: code from Tutorial 2 may help). 
 
 3. Based on the scatterplot and correlation values, would you say that they tend to agree? Why or why not?
